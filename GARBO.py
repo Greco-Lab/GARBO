@@ -5,9 +5,8 @@ Created on Wed Jul  6 09:30:19 2018
 @author: Vittorio Fortino
 """
 
-## MAGA - Cineca
 """
-A Python implementation of the MAGA algorithm.
+A Python implementation of the GARBO algorithm.
 Basic usage of the module is very simple:
     >  ()  main function
     
@@ -540,8 +539,8 @@ def getBenefit(ff_inv, ff_rest):
     return benefit
     
 ######################################################## TO adjust the feature importance
-def updateFeatRank(w, fsm_his, ff_inv, ff_rest):
-    usage = getUsage(fsm_his)
+def updateFeatRank(w, fsm_his, ff_inv, ff_rest, npop = 10):
+    usage = getUsage(fsm_his, npop)
     benefit = getBenefit(ff_inv, ff_rest)
     #u = np.zeros(len(w))
     for i in range(len(w)):
@@ -719,22 +718,9 @@ def niche(procid, dat, scores, cls, ng, nn, min_len, max_len,
 
     # Begin the generational process
     for gen in range(1, ngen + 1):
-        t1 = time()
         # Update the univariate rank
-        #if gen % upr_rate == 0 and gen > 0:
-            #weights = updateFeatRank(weights, fsm, ff_inv_ind, ff_rest_ind)
-            #print('--------')
-            #print(len([i for i, val in enumerate(weights) if val > .7]))
-            #print(len([i for i, val in enumerate(weights) if val > .5]))
-            #print(len([i for i, val in enumerate(weights) if val < .25]))
-            #print('--------')
-            #totp = sum([True for i,j in zip(weights, www) if i > j])
-            #print totp
-            #print sum([(i-j) for i,j in zip(weights, www) if i > j])/totp
-            #totn = sum([True for i,j in zip(weights, www) if i < j])
-            #print totn
-            #print sum([(j-i) for i,j in zip(weights, www) if i < j])/totn
- 
+        if gen % upr_rate == 0 and gen > 0:
+            weights = updateFeatRank(weights, fsm, ff_inv_ind, ff_rest_ind, npop)
         # Select the next generation individuals
         offspring = toolbox.select(population, len(population))
         # Clone the selected individuals
@@ -826,10 +812,6 @@ def niche(procid, dat, scores, cls, ng, nn, min_len, max_len,
         # Update current mean fitness
         crt_mean_fit = sum(fits)/len(population)
 
-        # Compile time
-        t2 = time()
-        dt = t2-t1
-
         # Append the current generation statistics to the logbook
         record = stats.compile(population) 
         logbook.record(gen = gen, 
@@ -870,7 +852,7 @@ def readDataResult(pathname, nn = 10):
         f.close()
     return ga_out_all
 
-# import MAGA as ma
-# maga_result = ma.readDataResult('data_ccle_erl_ge', nn=10)
+# import GARBO as ma
+# garbo_result = ma.readDataResult('data_ccle_erl_ge', nn=10)
 
     
