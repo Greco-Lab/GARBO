@@ -1,11 +1,11 @@
 import sys, getopt
 import random
-import MAGA as ma
+import GARBO as ma
 import cPickle as pickle
 from multiprocessing import Event, Pipe, Process
 from collections import deque
                              
-## Run NAGA        
+## Run GARBO        
 def main(argv):
     # default setting
     ngen = 1000
@@ -21,11 +21,11 @@ def main(argv):
         opts, args = getopt.getopt(argv,"hg:p:s:l:n:r:i:o:",["ngen=", "npop=", "minl=",
                                                              "maxl=", "nn=", "rn=", "ifile=", "ofolder="])
     except getopt.GetoptError:
-        print('runMAGA.py -g <ngen> -p <npop> -s <min.len> -l <max.len> -n <num.niches> -r <rank> -i <inputfile> -o <outputdir> error')
+        print('runGARBO.py -g <ngen> -p <npop> -s <min.len> -l <max.len> -n <num.niches> -r <rank> -i <inputfile> -o <outputdir> error')
         sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print('runMAGA.py -g <ngen> -p <npop> -s <min.len> -l <max.len> -n <num.niches> -r <rank> -i <inputfile> -o <outputdir>')
+            print('runGARBO.py -g <ngen> -p <npop> -s <min.len> -l <max.len> -n <num.niches> -r <rank> -i <inputfile> -o <outputdir>')
             sys.exit()
         elif opt in ("-i", "--ifile"):
             inputfile = arg
@@ -43,7 +43,6 @@ def main(argv):
             numN = int(arg)
         elif opt in ("-r"):
             rr = int(arg)
-    print("ciao")
     print(inputfile)
     if rr == 0:
         dat = ma.load_data_layer(inputfile, rank = False)
